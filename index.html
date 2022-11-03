@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wasm text encoder(demo)</title>
+  <style type="text/css">
+    :root {
+      --editor-height: 90%;
+      --editor-width: 80%;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .menu {
+      padding-top: 2em;
+      width: 100%;
+      text-align: center;
+    }
+
+    .menu>select {
+      padding: 0.2em;
+      background-color: rgb(255, 255, 255);
+      border: solid 0.1em;
+
+    }
+
+    .menu>button {
+      padding: 0.2em;
+      background-color: rgb(255, 255, 255);
+      border: solid 0.1em;
+    }
+
+    .editor {
+      width: 100%;
+      height: var(--editor-height);
+      text-align: center;
+    }
+
+    .editor>textarea {
+      width: var(--editor-width);
+      height: var(--editor-height);
+      margin: 1em;
+      padding: 1em;
+      resize: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu">
+    <label for="select-encoding">Save as</label>
+    <select id="select-encoding">
+      <option value="utf-8" selected>utf-8</option>
+      <option value="shift_jis">shift_jis</option>
+    </select>
+    <button class="save">Save Encoded File</button>
+  </div>
+  <div class="editor">
+    <textarea class="content" placeholder="Input text to encode"></textarea>
+  </div>
+
+</body>
+<script type="module">
+  import init, { encode } from "./pkg/wasm_text_encoder.js";
+
+  const saveAsCSV = (content, charset) => {
+    const file = new Blob([content], { type: `text/csv;charset=${charset};` })
+    const a = document.createElement("a")
+    a.style.display = "none"
+    const url = URL.createObjectURL(file)
+    a.href = url
+    document.body.appendChild(a)
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+  init().then(() => {
+    const content = document.querySelector(".content")
+    const saveButton = document.querySelector(".save")
+    const encodingSelecter = document.querySelector("#select-encoding")
+    saveButton.addEventListener("click", () => {
+      const encoding = encodingSelecter.value
+
+      const result = encode(content.value, encoding)
+      saveAsCSV(new Uint8Array(result.bytes), result.encoding.toLowerCase())
+    })
+  });
+</script>
+
+</html>
