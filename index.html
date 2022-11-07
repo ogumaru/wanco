@@ -69,7 +69,7 @@
 
 </body>
 <script type="module">
-  import init, { encode } from "./pkg/wasm_text_encoder.js";
+  import init, { encode } from "./pkg/wanco.js";
 
   const saveAsCSV = (content, charset) => {
     const file = new Blob([content], { type: `text/csv;charset=${charset};` })
