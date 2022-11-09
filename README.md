@@ -12,6 +12,7 @@ The one converting strings to other text encoding.
 
 - UTF-8
 - Shift_JIS
+- EUC-JP
 
 ## コンセプト / Concept
 
@@ -26,13 +27,11 @@ This assumed to converting huge UTF-8 format strings to Shift_JIS in the Web bro
 
 Comparation bellow
 
-|                |         encoding.js          |         Encoding API         |     wanco🐶      |
-| -------------- | :--------------------------: | :--------------------------: | :--------------: |
-| Implementation |          JavaScript          |            Native            |   WebAssembly    |
-| Encode To      | UTF-8, Shift_JIS, EUC-JP ... |            UTF-8,            | UTF-8, Shift_JIS |
-| Decode From    | UTF-8, Shift_JIS, EUC-JP ... | UTF-8, Shift_JIS, EUC-JP ... |        ー        |
-| Encode         |              ✅              |              ✅              |        ✅        |
-| Decode         |              ✅              |              ✅              |        ❌        |
+|                |         encoding.js          |         Encoding API         |         wanco🐶          |
+| -------------- | :--------------------------: | :--------------------------: | :----------------------: |
+| Implementation |          JavaScript          |            Native            |       WebAssembly        |
+| Encode To      | UTF-8, Shift_JIS, EUC-JP ... |            UTF-8             | UTF-8, Shift_JIS, EUC-JP |
+| Decode From    | UTF-8, Shift_JIS, EUC-JP ... | UTF-8, Shift_JIS, EUC-JP ... |            ー            |
 
 ## インストール / Install
 
