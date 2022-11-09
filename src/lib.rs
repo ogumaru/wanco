@@ -1,5 +1,5 @@
 mod utils;
-use encoding_rs::{SHIFT_JIS, UTF_8};
+use encoding_rs::{SHIFT_JIS, UTF_8, EUC_JP};
 use js_sys::{Error, JsString};
 use serde::{Deserialize, Serialize};
 use unicode_normalization::UnicodeNormalization;
@@ -24,6 +24,7 @@ pub fn encode(js_string: &JsString, encode_to: &JsString) -> Result<JsValue, JsV
         UTF_8
     } else {
         match String::from(encode_to).to_lowercase().as_str() {
+            "euc-jp" | "eucjp" => EUC_JP,
             "shift_jis" | "sjis" | "shift-jis" => SHIFT_JIS,
             "utf-8" | "utf8" => UTF_8,
             unsupported => {

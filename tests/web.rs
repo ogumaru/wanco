@@ -128,3 +128,41 @@ fn to_shiftjis_unmappble() {
     assert_eq!(encoded.bytes, [38, 35, 49, 50, 55, 56, 52, 51, 59]);
     assert_eq!(encoded.has_unmappable, true);
 }
+
+#[wasm_bindgen_test]
+fn to_eucjp_mappable() {
+    let js_string = JsString::from("ほげふが");
+    let encode_to = JsString::from("euc-jp");
+    let result = encode(&js_string, &encode_to);
+    let encoded_result = from_value::<EncodeResult>(result.unwrap());
+    let encoded = encoded_result.unwrap();
+    assert_eq!(encoded.bytes, [164, 219, 164, 178, 164, 213, 164, 172]);
+    assert_eq!(encoded.has_unmappable, false);
+}
+
+#[wasm_bindgen_test]
+fn to_eucjp_nfc() {
+    let js_string = JsString::from("①②～パぱ");
+    let encode_to = JsString::from("euc-jp");
+    let result = encode(&js_string, &encode_to);
+    let encoded_result = from_value::<EncodeResult>(result.unwrap());
+    let encoded = encoded_result.unwrap();
+    assert_eq!(
+        encoded.bytes,
+        [173, 161, 173, 162, 161, 193, 165, 209, 164, 209]
+    );
+    assert_eq!(encoded.has_unmappable, false);
+}
+
+#[wasm_bindgen_test]
+fn to_eucjp_unmappble() {
+    let js_string = JsString::from("🍣");
+    let encode_to = JsString::from("euc-jp");
+    let result = encode(&js_string, &encode_to);
+    let encoded_result = from_value::<EncodeResult>(result.unwrap());
+    let encoded = encoded_result.unwrap();
+    // Python3.10.6:
+    // [b for b in unicodedata.normalize("NFC", "🍣").encode("eucjp", "xmlcharrefreplace")]
+    assert_eq!(encoded.bytes, [38, 35, 49, 50, 55, 56, 52, 51, 59]);
+    assert_eq!(encoded.has_unmappable, true);
+}
